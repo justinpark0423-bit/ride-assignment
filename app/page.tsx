@@ -52,12 +52,12 @@ function HomeContent() {
           <div className="space-y-3">
             <Link href="/rider">
               <div className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium text-lg hover:bg-blue-700 cursor-pointer">
-                🙋 라이더 신청
+                🙋 라이더 / Rider 신청
               </div>
             </Link>
             <Link href="/driver">
               <div className="w-full bg-green-600 text-white py-3 rounded-lg font-medium text-lg hover:bg-green-700 cursor-pointer mt-3">
-                🚗 드라이버 신청
+                🚗 드라이버 / Driver 신청
               </div>
             </Link>
           </div>
@@ -65,7 +65,7 @@ function HomeContent() {
 
         {!loading && assignments.length > 0 && (
           <div className="bg-white p-6 rounded-xl shadow">
-            <h2 className="text-lg font-bold mb-4">🗓 배정 현황</h2>
+            <h2 className="text-lg font-bold mb-4">🗓 배정 현황 / Status</h2>
             {drivers.map((driver: any) => (
               <div key={driver.name} className="mb-4">
                 <div className="font-medium text-gray-700 mb-2">
