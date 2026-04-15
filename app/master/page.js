@@ -48,6 +48,18 @@ export default function MasterPage() {
     setLoading(false)
   }
 
+  const handleReset = async () => {
+    const confirm = window.confirm('정말 전체 초기화할까요? 라이더, 드라이버, 배정 데이터가 모두 삭제됩니다.')
+    if (!confirm) return
+    setLoading(true)
+    await supabase.from('assignments').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+    await supabase.from('riders').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+    await supabase.from('drivers').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+    await fetchData()
+    setLoading(false)
+    alert('초기화 완료!')
+  }
+
   const getAssignedDriver = (riderId) => {
     const a = assignments.find(a => a.rider_id === riderId)
     return a ? a.driver_id : ''
@@ -82,7 +94,15 @@ export default function MasterPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">마스터 대시보드</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">마스터 대시보드</h1>
+          <button
+            onClick={handleReset}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600"
+          >
+            전체 초기화
+          </button>
+        </div>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-xl shadow p-4 text-center">
