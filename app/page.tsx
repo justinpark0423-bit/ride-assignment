@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 export default function Home() {
-  const [assignments, setAssignments] = useState([])
+  const [assignments, setAssignments] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function Home() {
     fetchAssignments()
   }, [])
 
-  const drivers = [...new Map(assignments.map(a => [a.driver_id, a.drivers])).values()]
+  const drivers = [...new Map(assignments.map((a: any) => [a.driver_id, a.drivers])).values()]
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -44,15 +44,15 @@ export default function Home() {
         {!loading && assignments.length > 0 && (
           <div className="bg-white p-6 rounded-xl shadow">
             <h2 className="text-lg font-bold mb-4">🗓 배정 현황</h2>
-            {drivers.map(driver => (
+            {drivers.map((driver: any) => (
               <div key={driver.name} className="mb-4">
                 <div className="font-medium text-gray-700 mb-2">
                   🚗 {driver.name} ({driver.home_point})
                 </div>
                 <div className="space-y-1 pl-4">
                   {assignments
-                    .filter(a => a.drivers.name === driver.name)
-                    .map(a => (
+                    .filter((a: any) => a.drivers.name === driver.name)
+                    .map((a: any) => (
                       <div key={a.id} className="text-sm text-gray-600 flex justify-between">
                         <span>🙋 {a.riders.name}</span>
                         <span className="text-gray-400">{a.riders.drop_point}</span>
