@@ -1,14 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '../../lib/supabase'
 
 export default function DriverPage() {
+  const router = useRouter()
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [homePoint, setHomePoint] = useState('')
   const [maxPassengers, setMaxPassengers] = useState('')
-  const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
@@ -22,24 +23,10 @@ export default function DriverPage() {
     if (error) {
       alert('오류가 발생했습니다. 다시 시도해주세요.')
       console.error(error)
+      setLoading(false)
     } else {
-      setSubmitted(true)
+      router.push('/?submitted=driver')
     }
-    setLoading(false)
-  }
-
-  if (submitted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white p-8 rounded-xl shadow text-center">
-          <h2 className="text-2xl font-bold text-green-600 mb-2">신청 완료!</h2>
-          <p className="text-gray-600">드라이버 신청이 접수되었습니다.</p>
-          <p className="text-gray-500 mt-2">이름: {name}</p>
-          <p className="text-gray-500">거주 지점: {homePoint}</p>
-          <p className="text-gray-500">최대 탑승 인원: {maxPassengers}명</p>
-        </div>
-      </div>
-    )
   }
 
   return (

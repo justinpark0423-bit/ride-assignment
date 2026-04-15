@@ -2,21 +2,36 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { supabase } from '../lib/supabase'
 
 export default function Home() {
   const [assignments, setAssignments] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const searchParams = useSearchParams()
+  const submitted = searchParams.get('submitted')
+
+  const fetchAssignments = async () => {
+    const { data } = await supabase
+      .from('assignments')
+      .select('*, riders(name, drop_point), drivers(name, home_point)')
+    setAssignments(data || [])
+    setLoading(false)
+  }
 
   useEffect(() => {
-    const fetchAssignments = async () => {
-      const { data } = await supabase
-        .from('assignments')
-        .select('*, riders(name, drop_point), drivers(name, home_point)')
-      setAssignments(data || [])
-      setLoading(false)
-    }
     fetchAssignments()
+
+    const channel = supabase
+      .channel('assignments-channel')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'assignments' }, () => {
+        fetchAssignments()
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
   }, [])
 
   const drivers = [...new Map(assignments.map((a: any) => [a.driver_id, a.drivers])).values()]
@@ -24,6 +39,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-lg mx-auto">
+
+        {submitted && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl mb-4 text-center font-medium">
+            {submitted === 'rider' ? '🙋 라이더 신청이 완료됐습니다!' : '🚗 드라이버 신청이 완료됐습니다!'}
+          </div>
+        )}
+
         <div className="bg-white p-8 rounded-xl shadow text-center mb-6">
           <h1 className="text-3xl font-bold mb-2">RKCM Ride</h1>
           <p className="text-gray-500 mb-6">신청 유형을 선택하세요</p>
