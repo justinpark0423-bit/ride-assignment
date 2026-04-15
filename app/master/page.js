@@ -122,7 +122,6 @@ export default function MasterPage() {
             <thead>
               <tr className="border-b text-gray-500">
                 <th className="text-left py-2">이름</th>
-                <th className="text-left py-2">연락처</th>
                 <th className="text-left py-2">드롭 지점</th>
                 <th className="text-left py-2">배정 드라이버</th>
               </tr>
@@ -131,7 +130,6 @@ export default function MasterPage() {
               {riders.map(rider => (
                 <tr key={rider.id} className="border-b">
                   <td className="py-2">{rider.name}</td>
-                  <td className="py-2">{rider.phone}</td>
                   <td className="py-2">{rider.drop_point}</td>
                   <td className="py-2">
                     <select
