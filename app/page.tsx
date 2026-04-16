@@ -52,7 +52,7 @@ function HomeContent() {
           <div className="space-y-3">
             <Link href="/rider">
               <div className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium text-lg hover:bg-blue-700 cursor-pointer">
-                🙋 라이더 / Rider 신청
+                🙋 라이드 / Ride 신청
               </div>
             </Link>
             <Link href="/driver">
