@@ -115,6 +115,28 @@ export default function MasterPage() {
           </div>
         </div>
 
+        <div className="bg-white rounded-xl shadow p-6 mb-6">
+          <h2 className="text-lg font-bold mb-4">드라이버 목록</h2>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b text-gray-500">
+                <th className="text-left py-2">이름</th>
+                <th className="text-left py-2">거주 지점</th>
+                <th className="text-left py-2">최대 탑승</th>
+              </tr>
+            </thead>
+            <tbody>
+              {drivers.map(driver => (
+                <tr key={driver.id} className="border-b">
+                  <td className="py-2">{driver.name}</td>
+                  <td className="py-2">{driver.home_point}</td>
+                  <td className="py-2">{driver.max_passengers}명</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-bold mb-4">라이더 배정</h2>
           {loading && <p className="text-gray-400 text-sm mb-2">저장 중...</p>}
@@ -140,7 +162,7 @@ export default function MasterPage() {
                       <option value="">미배정</option>
                       {drivers.map(driver => (
                         <option key={driver.id} value={driver.id}>
-                          {driver.name} ({getDriverPassengerCount(driver.id)}/{driver.max_passengers}명)
+                          {driver.name} — {driver.home_point} ({getDriverPassengerCount(driver.id)}/{driver.max_passengers}명)
                         </option>
                       ))}
                     </select>

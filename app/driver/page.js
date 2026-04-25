@@ -8,6 +8,7 @@ export default function DriverPage() {
   const router = useRouter()
   const [name, setName] = useState('')
   const [homePoint, setHomePoint] = useState('')
+  const [offCampusLocation, setOffCampusLocation] = useState('')
   const [maxPassengers, setMaxPassengers] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -15,9 +16,11 @@ export default function DriverPage() {
     e.preventDefault()
     setLoading(true)
 
+    const finalHomePoint = homePoint === 'Off Campus' ? `Off Campus / ${offCampusLocation}` : homePoint
+
     const { error } = await supabase
       .from('drivers')
-      .insert([{ name, phone: '', home_point: homePoint, max_passengers: parseInt(maxPassengers) }])
+      .insert([{ name, phone: '', home_point: finalHomePoint, max_passengers: parseInt(maxPassengers) }])
 
     if (error) {
       alert('오류가 발생했습니다. 다시 시도해주세요.')
@@ -31,7 +34,7 @@ export default function DriverPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-xl shadow w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">드라이버 신청</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">드라이버 / Driver 신청</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
@@ -54,11 +57,24 @@ export default function DriverPage() {
             >
               <option value="">지점을 선택하세요</option>
               <option value="Livi">Livi</option>
-              <option value="Busch">Busch</option>
               <option value="CA">CA</option>
               <option value="C/D">C/D</option>
+              <option value="Off Campus">Off Campus</option>
             </select>
           </div>
+          {homePoint === 'Off Campus' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">거주 위치</label>
+              <input
+                type="text"
+                value={offCampusLocation}
+                onChange={(e) => setOffCampusLocation(e.target.value)}
+                required
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="주소를 입력하세요"
+              />
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">최대 탑승 인원</label>
             <input
